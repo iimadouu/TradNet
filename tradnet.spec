@@ -8,7 +8,6 @@ a = Analysis(
     binaries=[],
     datas=[
         ('tradnet_config.json', '.'),
-        ('ta-lib', 'ta-lib'),
     ],
     hiddenimports=[
         'MetaTrader5',
