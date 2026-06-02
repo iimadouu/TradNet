@@ -25,10 +25,10 @@ jobs:
     - name: Install TA-Lib
       shell: pwsh
       run: |
-        # Download TA-Lib wheel for Windows
+        # Download TA-Lib wheel from LFD (more reliable)
         $url = "https://github.com/cgohlke/talib-build/releases/download/v0.6.4/TA_Lib-0.6.4-cp312-cp312-win_amd64.whl"
-        Invoke-WebRequest -Uri $url -OutFile "TA_Lib.whl"
-        pip install TA_Lib.whl
+        Invoke-WebRequest -Uri $url -OutFile "TA_Lib-0.6.4-cp312-cp312-win_amd64.whl"
+        pip install "TA_Lib-0.6.4-cp312-cp312-win_amd64.whl"
     
     - name: Install dependencies
       run: |
