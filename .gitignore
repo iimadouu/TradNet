@@ -34,7 +34,6 @@ performance_data*.json
 # Build artifacts
 build/
 dist/
-*.spec
 *.whl
 
 # OS
