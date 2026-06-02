@@ -1,0 +1,7 @@
+MetaTrader5
+pandas
+numpy
+TA-Lib
+scikit-learn
+xgboost
+openai

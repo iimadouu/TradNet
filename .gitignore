@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs.txt
+diag_output.txt
+tradnet.log
+
+# Data files
+*.csv
+*.json
+!tradnet_config.json
+!requirements.txt
+market_scan.json
+scan_history.json
+performance_data*.json
+
+# Build artifacts
+build/
+dist/
+*.spec
+*.whl
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Emergency stop
+EMERGENCY_STOP.txt
+
+# Backup files
+*_backup.py
+*_backup.json
+
+# Large binaries
+*.exe
+*.zip

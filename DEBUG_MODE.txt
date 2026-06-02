@@ -1,0 +1,1 @@
+Debug mode enabled - will show detailed signal analysis

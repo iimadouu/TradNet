@@ -1,0 +1,70 @@
+{
+    "mt5": {
+        "login": 5049304548,
+        "password": "Ux*m2wCm",
+        "server": "MetaQuotes-Demo",
+        "path": "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+    },
+    "symbols": [
+        "EURUSD",
+        "GBPUSD",
+        "USDJPY",
+        "USDCHF",
+        "AUDUSD",
+        "NZDUSD",
+        "USDCAD",
+        "EURJPY",
+        "GBPJPY",
+        "EURGBP",
+        "EURAUD",
+        "EURCHF",
+        "AUDJPY",
+        "GBPAUD",
+        "GBPCHF",
+        "CHFJPY",
+        "CADJPY",
+        "AUDNZD",
+        "NZDJPY",
+        "AUDCAD",
+        "EURCAD",
+        "AUDCHF",
+        "CADCHF",
+        "NZDCAD",
+        "NZDCHF",
+        "GBPCAD",
+        "GBPNZD",
+        "XAUUSD",
+        "XAGUSD",
+        "US30",
+        "US100",
+        "US500",
+        "BTCUSD",
+        "ETHUSD"
+    ],
+    "trading": {
+        "min_scan_duration": 300,
+        "max_workers": 10,
+        "cycle_interval": 5,
+        "rescan_interval": 600,
+        "dashboard_interval": 120,
+        "strategy_report_interval": 300
+    },
+    "risk": {
+        "daily_loss_limit": 100.0,
+        "max_spread_multiplier": 2.0,
+        "min_win_rate": 0.40,
+        "performance_check_trades": 20
+    },
+    "trading_hours": {
+        "enabled": true,
+        "skip_weekends": true,
+        "skip_hours": [
+            0,
+            1,
+            2,
+            3,
+            22,
+            23
+        ]
+    }
+}

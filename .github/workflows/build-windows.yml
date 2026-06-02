@@ -1,0 +1,82 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Allows manual triggering from GitHub UI
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    
+    - name: Install TA-Lib
+      shell: pwsh
+      run: |
+        # Download TA-Lib wheel for Windows
+        $url = "https://github.com/cgohlke/talib-build/releases/download/v0.6.4/TA_Lib-0.6.4-cp312-cp312-win_amd64.whl"
+        Invoke-WebRequest -Uri $url -OutFile "TA_Lib.whl"
+        pip install TA_Lib.whl
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+    
+    - name: Build executable
+      run: |
+        pyinstaller tradnet.spec --clean --noconfirm
+    
+    - name: Create distribution package
+      shell: pwsh
+      run: |
+        # Create a folder with the executable and config
+        New-Item -ItemType Directory -Force -Path "dist-package"
+        Copy-Item "dist\TradNet.exe" -Destination "dist-package\"
+        Copy-Item "tradnet_config.json" -Destination "dist-package\"
+        
+        # Create README for the package
+        @"
+        # TradNet Windows Standalone
+        
+        ## Installation
+        1. Ensure MetaTrader 5 is installed on your system
+        2. Edit tradnet_config.json with your MT5 credentials
+        3. Run TradNet.exe
+        
+        ## Requirements
+        - Windows 10/11
+        - MetaTrader 5 (must be installed)
+        - No Python installation needed
+        
+        ## Usage
+        - Click Start Bot to begin trading
+        - Click Config to edit settings
+        - Logs appear in real-time in the GUI
+        "@ | Out-File -FilePath "dist-package\README.txt" -Encoding UTF8
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: TradNet-Windows-Executable
+        path: dist-package/
+        retention-days: 30
+    
+    - name: Create Release (if tagged)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist-package/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
