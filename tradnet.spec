@@ -11,9 +11,11 @@ a = Analysis(
     ],
     hiddenimports=[
         'MetaTrader5',
+        'Metatrader55._core',
         'pandas',
         'numpy',
         'talib',
+        'talib.stream',
         'sklearn',
         'xgboost',
         'openai',
