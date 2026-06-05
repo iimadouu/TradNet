@@ -19,6 +19,7 @@ a = Analysis(
         'sklearn',
         'xgboost',
         'openai',
+        'tradnet_main',
         'market_analyzer',
         'trade_executor_enhanced',
         'performance_tracker',
