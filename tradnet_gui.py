@@ -267,8 +267,31 @@ class TradNetGUI:
     def run_bot(self):
         """Run the bot and capture output"""
         try:
-            # Import and run the bot
-            import tradnet_main
+            # Get the directory where the executable is located
+            if getattr(sys, 'frozen', False):
+                # Running as compiled executable
+                base_dir = sys._MEIPASS
+            else:
+                # Running as script
+                base_dir = os.path.dirname(os.path.abspath(__file__))
+            
+            # Add base_dir to sys.path so Python can find the modules
+            if base_dir not in sys.path:
+                sys.path.insert(0, base_dir)
+            
+            self.log_queue.put(('log', f'🔍 Base directory: {base_dir}\n'))
+            self.log_queue.put(('log', f'🔍 sys.path: {sys.path[:3]}...\n'))
+            
+            # Try to import using importlib
+            import importlib.util
+            spec = importlib.util.spec_from_file_location("tradnet_main", os.path.join(base_dir, "tradnet_main.py"))
+            if spec and spec.loader:
+                tradnet_main = importlib.util.module_from_spec(spec)
+                sys.modules["tradnet_main"] = tradnet_main
+                spec.loader.exec_module(tradnet_main)
+                self.log_queue.put(('log', f'✅ Successfully loaded tradnet_main using importlib\n'))
+            else:
+                raise ImportError("Could not load tradnet_main module")
             
             # Redirect stdout/stderr
             old_stdout = sys.stdout
@@ -279,20 +302,28 @@ class TradNetGUI:
             
             try:
                 # Run the bot (this will block)
+                self.log_queue.put(('log', f'🚀 Calling tradnet_main.main()...\n'))
                 tradnet_main.main()
             except SystemExit:
                 pass
             except Exception as e:
+                import traceback
                 self.log_queue.put(('log', f'❌ Bot error: {e}\n'))
                 self.log_queue.put(('log', f'   {type(e).__name__}\n'))
+                self.log_queue.put(('log', f'   Traceback:\n'))
+                for line in traceback.format_exc().split('\n'):
+                    self.log_queue.put(('log', f'   {line}\n'))
             finally:
                 sys.stdout = old_stdout
                 sys.stderr = old_stderr
                 
-        except ImportError as e:
-            self.log_queue.put(('log', f'❌ Failed to import bot: {e}\n'))
         except Exception as e:
+            import traceback
             self.log_queue.put(('log', f'❌ Unexpected error: {e}\n'))
+            self.log_queue.put(('log', f'   {type(e).__name__}\n'))
+            self.log_queue.put(('log', f'   Traceback:\n'))
+            for line in traceback.format_exc().split('\n'):
+                self.log_queue.put(('log', f'   {line}\n'))
         finally:
             self.log_queue.put(('status', 'stopped'))
     

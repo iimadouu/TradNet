@@ -2,13 +2,22 @@
 
 block_cipher = None
 
+# Collect all Python files in the current directory
+import os
+import glob
+
+py_files = []
+for f in glob.glob('*.py'):
+    if f not in ['tradnet_gui.py']:  # Skip the GUI file (it's the entry point)
+        py_files.append((f, '.'))
+
 a = Analysis(
     ['tradnet_gui.py'],
     pathex=[],
     binaries=[],
     datas=[
         ('tradnet_config.json', '.'),
-    ],
+    ] + py_files,
     hiddenimports=[
         'MetaTrader5',
         'Metatrader55._core',
